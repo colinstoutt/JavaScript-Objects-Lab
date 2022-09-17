@@ -4,21 +4,21 @@ const game = {
   smallestNum: 1,
   secretNum: null,
   prevGuesses: [],
+
   getGuess: function () {
     let guess;
     while (true) {
-      guess = prompt(
-        `Enter a guess between ${this.smallestNum} and ${this.biggestNum}: ${this.secretNum}`
+      guess = parseInt(
+        prompt(
+          `Enter a guess between ${this.smallestNum} and ${this.biggestNum}: ${this.secretNum}`
+        )
       );
-      if (guess == this.secretNum) break;
-      if (guess > this.secretNum) {
-        alert("Guess is too high. Try again.");
-      } else if (guess < this.secretNum) {
-        alert("Guess is too low. Try again.");
-      }
-    }
 
-    return parseInt(guess);
+      this.prevGuesses.push(guess);
+
+      if (guess === this.secretNum) break;
+    }
+    return guess;
   },
 
   play: function () {
@@ -26,9 +26,26 @@ const game = {
       Math.floor(Math.random() * (this.biggestNum - this.smallestNum + 1)) +
       this.smallestNum;
 
-    this.prevGuesses.push(game.getGuess());
+    this.render(this.getGuess());
   },
-  render: function () {},
+
+  render: function (guess) {
+    if (guess === this.secretNum) {
+      alert(
+        `Congrats! You guessed the number in ${this.prevGuesses.length} guesses!`
+      );
+    } else if (guess > this.secretNum) {
+      alert(
+        `Guess is too high. Try again.
+          Previous guesses: ${this.prevGuesses.join(", ")}`
+      );
+    } else if (guess < this.secretNum) {
+      alert(
+        `Guess is too low. Try again.
+          Previous guesses: ${this.prevGuesses.join(", ")}`
+      );
+    }
+  },
 };
 
 game.play();
